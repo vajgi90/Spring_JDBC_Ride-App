@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ride?useUnicode=yes&characterEncoding=UTF-8
+    username: ride
+    password: KkN7{/uvw}?CKi).hDY8YSM0}YMC3QT
