@@ -39,7 +39,7 @@ This repository contains an app that uses MYSQL database and simple JDBC Connect
 	#10: delete record with JdbcTemplate.update() method;
 	#11: delete record with NamedParameterJdbcTemplate() class;
 
-4. The RideControllerTest class contains testing the endpoints. 
+4. The RideControllerTest class contains the tests of endpoints;
 
 5. References:
 	This project is based on Bryan Hansen: Building Application Using Spring JDBC course.
