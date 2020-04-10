@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class RideControllerTest {
 
-/*  @Test(timeout=3000)
+  @Test(timeout=3000)
   public void testCreateRide() {
     RestTemplate restTemplate = new RestTemplate();
 
@@ -20,7 +20,7 @@ public class RideControllerTest {
 
     ride = restTemplate.postForObject("http://localhost:8080/ride", ride, Ride.class);
     System.out.println("Ride: " + ride);
-  }*/
+  }
 
   @Test(timeout=3000)
   public void testGetRides() {

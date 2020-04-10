@@ -26,28 +26,31 @@ public class RideController {
   private RideService rideService;
 
   @GetMapping("rides")
-  public List<Ride> getRides() {
-    return rideService.getRides();
+  public ResponseEntity<List<Ride>> getRides() {
+    return new ResponseEntity<>(rideService.getRides(), HttpStatus.OK);
   }
 
   @GetMapping("ride/{id}")
-  public Ride getRideById(@PathVariable Integer id) {
-    return rideService.getRide(id);
+  public ResponseEntity<Ride> getRideById(@PathVariable Integer id) {
+    return new ResponseEntity<>(rideService.getRide(id), HttpStatus.OK);
   }
 
   @GetMapping("ride/batch")
-  public void batch() {
+  public ResponseEntity<?> batch() {
     rideService.batch();
+    return ResponseEntity.accepted().build();
   }
 
   @PostMapping("ride")
-  public Ride createRide(@RequestBody Ride ride) {
-    return rideService.createRide(ride);
+  public ResponseEntity<Ride>  createRide(@RequestBody Ride ride) {
+    rideService.createRide(ride);
+    return new ResponseEntity<>(rideService.createRide(ride), HttpStatus.CREATED);
   }
 
   @PutMapping("ride")
-  public Ride updateRide(@RequestBody Ride ride) {
-    return rideService.updateRide(ride);
+  public ResponseEntity<Ride>  updateRide(@RequestBody Ride ride) {
+    rideService.updateRide(ride);
+    return ResponseEntity.accepted().build();
   }
 
   @DeleteMapping("ride/{id}")

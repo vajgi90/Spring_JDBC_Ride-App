@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.convert.WritingConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -21,11 +20,11 @@ public class RideRepositoryImpl implements RideRepository {
 
   @Override
   public Ride createRide(Ride ride) {
-    //#1: This is the shortest solution, to insert data
+//	#1: inserting data with JdbcTemplate.update() method;
 /*    jdbcTemplate.update("insert into rides (name, duration) values (?,?)", ride.getName(),
         ride.getDuration());
         return null;*/
-    //#2: This is a longer option, but it provides the generated id
+    //#2: inserting data with SimpleJdbcInsert class to retieve the key;
 /*    SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
 
     List<String> columns = new ArrayList<>();
@@ -45,7 +44,7 @@ public class RideRepositoryImpl implements RideRepository {
     System.out.println(key);
     return null */
 
-    //#3: Solution with keyholder
+    //#3: inserting data with JdbcTemplate.update() method and KeyHolder;
 /*    KeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
@@ -60,7 +59,7 @@ public class RideRepositoryImpl implements RideRepository {
     Number id = keyHolder.getKey();
     return getRide(id.intValue());*/
 
-    //#4: Solution based on #2 and combined with getRide() method
+    //#4: solution based on #2 and combined with getRide() method;
     SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
 
     insert.setGeneratedKeyName("id");
@@ -82,19 +81,20 @@ public class RideRepositoryImpl implements RideRepository {
 
   @Override
   public Ride getRide(Integer id) {
+    //#5: get one row by using JdbcTemplate.queryForObject() method;
     Ride ride = jdbcTemplate
         .queryForObject("select * from rides where id = ?", new RideRowMapper(), id);
     return ride;
   }
 
-
   @Override
   public List<Ride> getRides() {
+    //#6: get all records by using JdbcTemplate.query() method;
     List<Ride> rides = jdbcTemplate.query("select * from rides", new RideRowMapper());
     return rides;
   }
 
-  //This is the longer version of the prior method above, with anonymous innerclass and without RideRowMapper interface
+  //#7: get all records by using JdbcTemplate.query() method with anonymus innerclass implementation;
 /*  @Override
   public List<Ride> getRides() {
     List<Ride> rides = jdbcTemplate.query("select * from rides", new RowMapper<Ride>(){
@@ -113,6 +113,7 @@ public class RideRepositoryImpl implements RideRepository {
 
   @Override
   public Ride updateRide(Ride ride) {
+    //#8: update record with JdbcTemplate.update() method;
     jdbcTemplate.update("update rides set name = ?, duration = ? where id = ?",
         ride.getName(),
         ride.getDuration(),
@@ -122,15 +123,16 @@ public class RideRepositoryImpl implements RideRepository {
 
   @Override
   public void updateRides(List<Object[]> pairs) {
+    //#9: update records with JdbcTemplate.batchUpdate() method;
     jdbcTemplate.batchUpdate("update rides set ride_date = ? where id = ?", pairs);
   }
 
   @Override
   public void deleteRide(Integer id) {
-    //# : This is the original solution for deleting data from table by id
+    //#10: delete record with JdbcTemplate.update() method;
     //jdbcTemplate.update("delete from rides where id = ?", id);
 
-    //# : This is the namedParameter solution for deleting
+    //#11: delete record with NamedParameterJdbcTemplate() class;
     NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     Map<String, Object> paramMap = new HashMap<>();
     paramMap.put("id", id);
